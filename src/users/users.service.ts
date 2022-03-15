@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { Like, Repository } from 'typeorm'
 import { CreateUserDTO } from './dtos/create-user.dto'
 import { UpdateUserDTO } from './dtos/update-user.dto'
 import { User } from './entities/user.entity'
@@ -23,7 +23,13 @@ export class UsersService {
   }
 
   find(email?: string) {
-    return this.userRepository.find({ email })
+    if (email) {
+      return this.userRepository.find({
+        where: { email: Like(`%${email}%`) }
+      })
+    }
+
+    return this.userRepository.find()
   }
 
   async update({ id, email, password }: UpdateUserDTO) {
