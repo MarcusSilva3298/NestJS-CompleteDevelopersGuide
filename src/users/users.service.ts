@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException
+} from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Like, Repository } from 'typeorm'
 import { CreateUserDTO } from './dtos/create-user.dto'
@@ -19,6 +23,10 @@ export class UsersService {
   }
 
   findOne(id: string) {
+    if (!id) {
+      return null
+    }
+
     return this.userRepository.findOne(id)
   }
 
